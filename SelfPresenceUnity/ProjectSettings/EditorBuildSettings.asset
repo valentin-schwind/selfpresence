@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/1 Welcome Scene.unity
+  - enabled: 1
+    path: Assets/Scenes/Toon Hands.unity
+  - enabled: 1
+    path: Assets/Scenes/Toon Hands Question.unity
+  - enabled: 1
+    path: Assets/Scenes/Androgyn Hands.unity
+  - enabled: 1
+    path: Assets/Scenes/Androgyn Hands Question.unity
+  - enabled: 1
+    path: Assets/Scenes/Female Hands.unity
+  - enabled: 1
+    path: Assets/Scenes/Female Hands Question.unity
+  - enabled: 1
+    path: Assets/Scenes/Robot Hands.unity
+  - enabled: 1
+    path: Assets/Scenes/Robot Hands Question.unity
+  - enabled: 1
+    path: Assets/Scenes/Pepper Hands.unity
+  - enabled: 1
+    path: Assets/Scenes/Pepper Hands Question.unity
+  - enabled: 1
+    path: Assets/Scenes/Capsule Hands.unity
+  - enabled: 1
+    path: Assets/Scenes/Capsule Hands Question.unity
+  - enabled: 1
+    path: Assets/Scenes/alt/Thank You Screen.unity

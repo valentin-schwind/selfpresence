@@ -1,0 +1,15 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PyramidTask.cs">
+    <Files>
+      <File FileName="Assets\Scripts\PyramidTask.cs" Line="135" Column="1" />
+      <File FileName="Assets\LeapMotion\Scripts\DetectionUtilities\PinchDetector.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\StraysGameManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\DrawTask.cs" Line="27" Column="45" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

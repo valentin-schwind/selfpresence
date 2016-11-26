@@ -1,0 +1,763 @@
+﻿using UnityEngine;
+using System.Collections;
+using UnityEngine.UI;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using UnityEngine.SceneManagement;
+
+public class UI_panel_movement : MonoBehaviour {
+	[SerializeField] int nextScene;
+	[SerializeField] Button backwardbutton;
+	[SerializeField] Button forwardbutton;
+    [SerializeField] GameObject panel_vali_q;
+    [SerializeField] GameObject panel_vali_1;
+	[SerializeField] GameObject panel_vali_2;
+	[SerializeField] GameObject panel_vali_3;
+	[SerializeField] GameObject panel_vali_4;
+	[SerializeField] GameObject panel_1;
+	[SerializeField] GameObject panel_2;
+	[SerializeField] GameObject panel_3;
+	[SerializeField] GameObject panel_4;
+	[SerializeField] GameObject panel_5;
+	[SerializeField] GameObject panel_6;
+	[SerializeField] GameObject panel_7;
+	[SerializeField] GameObject panel_8;
+	[SerializeField] GameObject panel_9;
+	[SerializeField] GameObject panel_10;
+	[SerializeField] GameObject panel_11;
+	[SerializeField] GameObject panel_12;
+	[SerializeField] GameObject panel_13;
+	[SerializeField] GameObject panel_14;
+	[SerializeField] GameObject panel_15;
+	[SerializeField] GameObject panel_16;
+	[SerializeField] GameObject panel_17;
+	[SerializeField] GameObject panel_18;
+	[SerializeField] GameObject panel_19;
+	[SerializeField] GameObject panel_20;
+	[SerializeField] GameObject panel_21;
+	[SerializeField] GameObject panel_22;
+	[SerializeField] GameObject panel_23;
+	[SerializeField] GameObject panel_24;
+	[SerializeField] GameObject panel_25;
+	[SerializeField] GameObject panel_26;
+	[SerializeField] GameObject panel_27;
+	[SerializeField] GameObject panel_28;
+	[SerializeField] GameObject panel_29;
+	[SerializeField] GameObject panel_30;
+	[SerializeField] GameObject panel_31;
+	[SerializeField] GameObject panel_32;
+	[SerializeField] GameObject panel_33_blank_panel;
+	[SerializeField] GameObject panel_34_end_panel;
+    StringBuilder csvString = new StringBuilder();
+    private int counter = 0;
+	public string string_case_1 = "";
+	public string string_case_2 = "";
+	public string string_case_3 = "";
+	public string string_case_4 = "";
+	public string string_case_5 = "";
+	public string string_case_6 = "";
+	public string string_case_7 = "";
+	public string string_case_8 = "";
+	public string string_case_9 = "";
+	public string string_case_10 = "";
+	public string string_case_11 = "";
+	public string string_case_12 = "";
+
+
+
+	List<GameObject> panels = new List<GameObject> ();
+	void Start() {
+        panels.Add (panel_vali_q);
+		panels.Add (panel_vali_1);
+		panels.Add (panel_vali_2);
+		panels.Add (panel_vali_3);
+        panels.Add (panel_vali_4);
+		panels.Add (panel_1);
+		panels.Add (panel_2);
+		panels.Add (panel_3);
+		panels.Add (panel_4);
+		panels.Add (panel_5);
+		panels.Add (panel_6);
+		panels.Add (panel_7);
+		panels.Add (panel_8);
+		panels.Add (panel_9);
+		panels.Add (panel_10);
+		panels.Add (panel_11);
+		panels.Add (panel_12);
+		panels.Add (panel_13);
+		panels.Add (panel_14);
+		panels.Add (panel_15);
+		panels.Add (panel_16);
+		panels.Add (panel_17);
+		panels.Add (panel_18);
+		panels.Add (panel_19);
+		panels.Add (panel_20);
+		panels.Add (panel_21);
+		panels.Add (panel_22);
+		panels.Add (panel_23);
+		panels.Add (panel_24);
+		panels.Add (panel_25);
+		panels.Add (panel_26);
+		panels.Add (panel_27);
+		panels.Add (panel_28);
+		panels.Add (panel_29);
+		panels.Add (panel_30);
+		panels.Add (panel_31);
+		panels.Add (panel_32);
+        //panels.Add (panel_33_blank_panel);
+    }
+	void Awake () {
+		backwardbutton.onClick.AddListener (backward);
+		forwardbutton.onClick.AddListener (forward);
+	}
+	void forward() {
+		if (counter == 12)
+		{
+			Debug.Log ("counter ist 12");
+			StartCoroutine ("passed");
+		} else {
+			counter = counter + 1;
+			switch(counter) {
+			case 0:
+				foreach (GameObject gameObj in panels) {
+					gameObj.SetActive (false);
+				}
+                panel_vali_q.SetActive(true);
+				panel_vali_1.SetActive (true);
+				panel_vali_2.SetActive (true);
+				panel_vali_3.SetActive (true);
+				panel_vali_4.SetActive (true);
+				break;
+			case 1:
+				ToggleGroup question_0_1 = panel_vali_1.GetComponentInChildren<ToggleGroup> () as ToggleGroup;
+				ToggleGroup question_0_2 = panel_vali_2.GetComponentInChildren<ToggleGroup> () as ToggleGroup;
+				ToggleGroup question_0_3 = panel_vali_3.GetComponentInChildren<ToggleGroup> () as ToggleGroup;
+				ToggleGroup question_0_4 = panel_vali_4.GetComponentInChildren<ToggleGroup> () as ToggleGroup;
+				if(question_0_3.AnyTogglesOn() && question_0_2.AnyTogglesOn() && question_0_1.AnyTogglesOn() && question_0_4.AnyTogglesOn()) {
+						
+						Debug.Log("1. fall");
+                        
+						IEnumerator<Toggle> toggleEnum_0_1 = question_0_1.ActiveToggles().GetEnumerator();
+                        toggleEnum_0_1.MoveNext();
+                        Toggle toggle_0_1 = toggleEnum_0_1.Current;
+                        string string_toggle_0_1 = collectToggles(toggle_0_1);
+
+
+                        IEnumerator<Toggle> toggleEnum_0_2 = question_0_2.ActiveToggles().GetEnumerator();
+                        toggleEnum_0_2.MoveNext();
+                        Toggle toggle_0_2 = toggleEnum_0_2.Current;
+                        string string_toggle_0_2 = collectToggles(toggle_0_2);
+
+                        IEnumerator<Toggle> toggleEnum_0_3 = question_0_3.ActiveToggles().GetEnumerator();
+                        toggleEnum_0_3.MoveNext();
+                        Toggle toggle_0_3 = toggleEnum_0_3.Current;
+						string string_toggle_0_3 = collectToggles(toggle_0_3);
+
+						IEnumerator<Toggle> toggleEnum_0_4 = question_0_4.ActiveToggles().GetEnumerator();
+						toggleEnum_0_4.MoveNext();
+						Toggle toggle_0_4 = toggleEnum_0_4.Current;
+						string string_toggle_0_4 = collectToggles(toggle_0_4);
+
+						
+						
+					string_case_1 = string_toggle_0_1 + ";" + string_toggle_0_2 + ";" + string_toggle_0_3 + ";" + string_toggle_0_4 + ";";
+
+					foreach (GameObject gameObj in panels)
+					{
+						gameObj.SetActive(false);
+					}
+					panel_1.SetActive(true);
+					panel_2.SetActive(true);
+					panel_3.SetActive(true);
+                        panel_vali_q.SetActive(false);
+                        panel_vali_1.SetActive(false);
+                        panel_vali_2.SetActive(false);
+                        panel_vali_3.SetActive(false);
+                        panel_vali_4.SetActive(false);
+                    } else
+                    {
+                        counter = counter - 1;
+                    }
+                    break;
+			case 2:
+                    ToggleGroup question_1 = panel_1.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_2 = panel_2.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_3 = panel_3.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    if (question_3.AnyTogglesOn() && question_2.AnyTogglesOn() && question_1.AnyTogglesOn())
+                    {
+                        
+                        Debug.Log("2. fall");
+
+                        IEnumerator<Toggle> toggleEnum_1 = question_1.ActiveToggles().GetEnumerator();
+                        toggleEnum_1.MoveNext();
+                        Toggle toggle_1 = toggleEnum_1.Current;
+						string string_toggle_1 = collectToggles(toggle_1);
+
+
+                        IEnumerator<Toggle> toggleEnum_2 = question_2.ActiveToggles().GetEnumerator();
+                        toggleEnum_2.MoveNext();
+                        Toggle toggle_2 = toggleEnum_2.Current;
+						string string_toggle_2 = collectToggles(toggle_2);
+
+                        IEnumerator<Toggle> toggleEnum_3 = question_3.ActiveToggles().GetEnumerator();
+                        toggleEnum_3.MoveNext();
+                        Toggle toggle_3 = toggleEnum_3.Current;
+                       	string string_toggle_3 = collectToggles(toggle_3);
+						
+						string_case_2 = string_toggle_1 + ";" + string_toggle_2 + ";" + string_toggle_3 + ";";
+                        foreach (GameObject gameObj in panels)
+                        {
+                            gameObj.SetActive(false);
+                        }
+                        panel_4.SetActive(true);
+                        panel_5.SetActive(true);
+                        panel_6.SetActive(true);
+                    }
+                    else
+                    {
+                        counter = counter - 1;
+                    }
+                    break;
+			case 3:
+                    ToggleGroup question_4 = panel_4.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_5 = panel_5.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_6 = panel_6.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    if (question_6.AnyTogglesOn() && question_5.AnyTogglesOn() && question_4.AnyTogglesOn())
+                    {
+
+                        Debug.Log("3. fall");
+
+                        IEnumerator<Toggle> toggleEnum_4 = question_4.ActiveToggles().GetEnumerator();
+                        toggleEnum_4.MoveNext();
+                        Toggle toggle_4 = toggleEnum_4.Current;
+						string string_toggle_4 = collectToggles(toggle_4);
+
+
+                        IEnumerator<Toggle> toggleEnum_5 = question_5.ActiveToggles().GetEnumerator();
+                        toggleEnum_5.MoveNext();
+                        Toggle toggle_5 = toggleEnum_5.Current;
+						string string_toggle_5 = collectToggles(toggle_5);
+
+                        IEnumerator<Toggle> toggleEnum_6 = question_6.ActiveToggles().GetEnumerator();
+                        toggleEnum_6.MoveNext();
+                        Toggle toggle_6 = toggleEnum_6.Current;
+						string string_toggle_6 = collectToggles(toggle_6);
+						
+						string_case_3 = string_toggle_4 + ";" + string_toggle_5 + ";" + string_toggle_6 + ";";
+                        foreach (GameObject gameObj in panels)
+                        {
+                            gameObj.SetActive(false);
+                        }
+                        panel_7.SetActive(true);
+                        panel_8.SetActive(true);
+                        panel_9.SetActive(true);
+                    }
+                    else
+                    {
+                        counter = counter - 1;
+                    }
+                    break;
+                case 4:
+                    ToggleGroup question_7 = panel_7.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_8 = panel_8.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_9 = panel_9.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    if (question_9.AnyTogglesOn() && question_8.AnyTogglesOn() && question_7.AnyTogglesOn())
+                    {
+
+                        Debug.Log("4. fall");
+
+                        IEnumerator<Toggle> toggleEnum_7 = question_7.ActiveToggles().GetEnumerator();
+                        toggleEnum_7.MoveNext();
+                        Toggle toggle_7 = toggleEnum_7.Current;
+						string string_toggle_7 = collectToggles(toggle_7);
+
+
+                        IEnumerator<Toggle> toggleEnum_8 = question_8.ActiveToggles().GetEnumerator();
+                        toggleEnum_8.MoveNext();
+                        Toggle toggle_8 = toggleEnum_8.Current;
+						string string_toggle_8 = collectToggles(toggle_8);
+
+                        IEnumerator<Toggle> toggleEnum_9 = question_9.ActiveToggles().GetEnumerator();
+                        toggleEnum_9.MoveNext();
+                        Toggle toggle_9 = toggleEnum_9.Current;
+						string string_toggle_9 = collectToggles(toggle_9);
+						
+
+						string_case_4 = string_toggle_7 + ";" + string_toggle_8 + ";" + string_toggle_9 + ";";
+                        foreach (GameObject gameObj in panels)
+                        {
+                            gameObj.SetActive(false);
+                        }
+                        panel_10.SetActive(true);
+                        panel_11.SetActive(true);
+                        panel_12.SetActive(true);
+                    }
+                    else
+                    {
+                        counter = counter - 1;
+                    }
+                    break;
+                case 5:
+                    ToggleGroup question_10 = panel_10.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_11 = panel_11.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_12 = panel_12.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    if (question_12.AnyTogglesOn() && question_11.AnyTogglesOn() && question_10.AnyTogglesOn())
+                    {
+
+                        Debug.Log("5. fall");
+
+                        IEnumerator<Toggle> toggleEnum_10 = question_10.ActiveToggles().GetEnumerator();
+                        toggleEnum_10.MoveNext();
+                        Toggle toggle_10 = toggleEnum_10.Current;
+                        string string_toggle_10 = collectToggles(toggle_10);
+						
+
+                        IEnumerator<Toggle> toggleEnum_11 = question_11.ActiveToggles().GetEnumerator();
+                        toggleEnum_11.MoveNext();
+                        Toggle toggle_11 = toggleEnum_11.Current;
+						string string_toggle_11 = collectToggles(toggle_11);
+
+                        IEnumerator<Toggle> toggleEnum_12 = question_12.ActiveToggles().GetEnumerator();
+                        toggleEnum_12.MoveNext();
+                        Toggle toggle_12 = toggleEnum_12.Current;
+						string string_toggle_12 = collectToggles(toggle_12);
+						
+
+						string_case_5 = string_toggle_10 + ";" + string_toggle_11 + ";" + string_toggle_12 + ";";
+                        foreach (GameObject gameObj in panels)
+                        {
+                            gameObj.SetActive(false);
+                        }
+                        panel_13.SetActive(true);
+                        panel_14.SetActive(true);
+                        panel_15.SetActive(true);
+                    }
+                    else
+                    {
+                        counter = counter - 1;
+                    }
+                    break;
+                case 6:
+                    ToggleGroup question_13 = panel_13.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_14 = panel_14.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_15 = panel_15.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    if (question_15.AnyTogglesOn() && question_14.AnyTogglesOn() && question_13.AnyTogglesOn())
+                    {
+
+                        Debug.Log("6. fall");
+
+                        IEnumerator<Toggle> toggleEnum_13 = question_13.ActiveToggles().GetEnumerator();
+                        toggleEnum_13.MoveNext();
+                        Toggle toggle_13 = toggleEnum_13.Current;
+						string string_toggle_13 = collectToggles(toggle_13);
+
+                        IEnumerator<Toggle> toggleEnum_14 = question_14.ActiveToggles().GetEnumerator();
+                        toggleEnum_14.MoveNext();
+                        Toggle toggle_14 = toggleEnum_14.Current;
+						string string_toggle_14 = collectToggles(toggle_14);
+
+                        IEnumerator<Toggle> toggleEnum_15 = question_15.ActiveToggles().GetEnumerator();
+                        toggleEnum_15.MoveNext();
+                        Toggle toggle_15 = toggleEnum_15.Current;
+						string string_toggle_15 = collectToggles(toggle_15);
+						
+						string_case_6 = string_toggle_13 + ";" + string_toggle_14 + ";" + string_toggle_15 + ";";
+                        foreach (GameObject gameObj in panels)
+                        {
+                            gameObj.SetActive(false);
+                        }
+                        panel_16.SetActive(true);
+                        panel_17.SetActive(true);
+                        panel_18.SetActive(true);
+                    }
+                    else
+                    {
+                        counter = counter - 1;
+                    }
+                    break;
+                case 7:
+                    ToggleGroup question_16 = panel_16.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_17 = panel_17.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_18 = panel_18.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    if (question_18.AnyTogglesOn() && question_17.AnyTogglesOn() && question_16.AnyTogglesOn())
+                    {
+
+                        Debug.Log("7. fall");
+
+                        IEnumerator<Toggle> toggleEnum_16 = question_16.ActiveToggles().GetEnumerator();
+                        toggleEnum_16.MoveNext();
+                        Toggle toggle_16 = toggleEnum_16.Current;
+						string string_toggle_16 = collectToggles(toggle_16);
+
+                        IEnumerator<Toggle> toggleEnum_17 = question_17.ActiveToggles().GetEnumerator();
+                        toggleEnum_17.MoveNext();
+                        Toggle toggle_17 = toggleEnum_17.Current;
+						string string_toggle_17 = collectToggles(toggle_17);
+
+                        IEnumerator<Toggle> toggleEnum_18 = question_18.ActiveToggles().GetEnumerator();
+                        toggleEnum_18.MoveNext();
+                        Toggle toggle_18 = toggleEnum_18.Current;
+                        string string_toggle_18 = collectToggles(toggle_18);
+						
+						string_case_7 = string_toggle_16 + ";" + string_toggle_17 + ";" + string_toggle_18 + ";";
+                        foreach (GameObject gameObj in panels)
+                        {
+                            gameObj.SetActive(false);
+                        }
+                        panel_19.SetActive(true);
+                        panel_20.SetActive(true);
+                        panel_21.SetActive(true);
+                    }
+                    else
+                    {
+                        counter = counter - 1;
+                    }
+                    break;
+                case 8:
+                    ToggleGroup question_19 = panel_19.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_20 = panel_20.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_21 = panel_21.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    if (question_21.AnyTogglesOn() && question_20.AnyTogglesOn() && question_19.AnyTogglesOn())
+                    {
+
+                        Debug.Log("8. fall");
+
+                        IEnumerator<Toggle> toggleEnum_19 = question_19.ActiveToggles().GetEnumerator();
+                        toggleEnum_19.MoveNext();
+                        Toggle toggle_19 = toggleEnum_19.Current;
+						string string_toggle_19 = collectToggles(toggle_19);
+				
+                        IEnumerator<Toggle> toggleEnum_20 = question_20.ActiveToggles().GetEnumerator();
+                        toggleEnum_20.MoveNext();
+                        Toggle toggle_20 = toggleEnum_20.Current;
+						string string_toggle_20 = collectToggles(toggle_20);
+
+                        IEnumerator<Toggle> toggleEnum_21 = question_21.ActiveToggles().GetEnumerator();
+                        toggleEnum_21.MoveNext();
+                        Toggle toggle_21 = toggleEnum_21.Current;
+						string string_toggle_21 = collectToggles(toggle_21);
+						
+						string_case_8 = string_toggle_19 + ";" + string_toggle_20 + ";" + string_toggle_21 + ";";
+						
+                        foreach (GameObject gameObj in panels)
+                        {
+                            gameObj.SetActive(false);
+                        }
+                        panel_22.SetActive(true);
+                        panel_23.SetActive(true);
+                        panel_24.SetActive(true);
+                    }
+                    else
+                    {
+                        counter = counter - 1;
+                    }
+                    break;
+                case 9:
+                    ToggleGroup question_22 = panel_22.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_23 = panel_23.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_24 = panel_24.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    if (question_24.AnyTogglesOn() && question_23.AnyTogglesOn() && question_22.AnyTogglesOn())
+                    {
+
+                        Debug.Log("9. fall");
+
+                        IEnumerator<Toggle> toggleEnum_22 = question_22.ActiveToggles().GetEnumerator();
+                        toggleEnum_22.MoveNext();
+                        Toggle toggle_22 = toggleEnum_22.Current;
+					 	string string_toggle_22 = collectToggles(toggle_22);
+
+
+                        IEnumerator<Toggle> toggleEnum_23 = question_23.ActiveToggles().GetEnumerator();
+                        toggleEnum_23.MoveNext();
+                        Toggle toggle_23 = toggleEnum_23.Current;
+						string string_toggle_23 = collectToggles(toggle_23);
+
+                        IEnumerator<Toggle> toggleEnum_24 = question_24.ActiveToggles().GetEnumerator();
+                        toggleEnum_24.MoveNext();
+                        Toggle toggle_24 = toggleEnum_24.Current;
+						string string_toggle_24 = collectToggles(toggle_24);
+		
+						string_case_9 = string_toggle_22 + ";" + string_toggle_23 + ";" + string_toggle_24 + ";";
+                        foreach (GameObject gameObj in panels)
+                        {
+                            gameObj.SetActive(false);
+                        }
+                        panel_25.SetActive(true);
+                        panel_26.SetActive(true);
+                        panel_27.SetActive(true);
+                    }
+                    else
+                    {
+                        counter = counter - 1;
+                    }
+                    break;
+                case 10:
+                    ToggleGroup question_25 = panel_25.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_26 = panel_26.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_27 = panel_27.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    if (question_27.AnyTogglesOn() && question_26.AnyTogglesOn() && question_25.AnyTogglesOn())
+                    {
+
+                        Debug.Log("10. fall");
+
+                        IEnumerator<Toggle> toggleEnum_25 = question_25.ActiveToggles().GetEnumerator();
+                        toggleEnum_25.MoveNext();
+                        Toggle toggle_25 = toggleEnum_25.Current;
+                        string string_toggle_25 = collectToggles(toggle_25);
+
+                        IEnumerator<Toggle> toggleEnum_26 = question_26.ActiveToggles().GetEnumerator();
+                        toggleEnum_26.MoveNext();
+                        Toggle toggle_26 = toggleEnum_26.Current;
+                        string string_toggle_26 = collectToggles(toggle_26);
+
+                        IEnumerator<Toggle> toggleEnum_27 = question_27.ActiveToggles().GetEnumerator();
+                        toggleEnum_27.MoveNext();
+                        Toggle toggle_27 = toggleEnum_27.Current;
+                        string string_toggle_27 = collectToggles(toggle_27);
+
+						string_case_10 = string_toggle_25 + ";" + string_toggle_26 + ";" + string_toggle_27 + ";";
+                        foreach (GameObject gameObj in panels)
+                        {
+                            gameObj.SetActive(false);
+                        }
+                        panel_28.SetActive(true);
+                        panel_29.SetActive(true);
+                        panel_30.SetActive(true);
+                    }
+                    else
+                    {
+                        counter = counter - 1;
+                    }
+                    break;
+                case 11:
+                    ToggleGroup question_28 = panel_28.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_29 = panel_29.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    ToggleGroup question_30 = panel_30.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+                    if (question_30.AnyTogglesOn() && question_29.AnyTogglesOn() && question_28.AnyTogglesOn())
+                    {
+
+                        Debug.Log("11. fall");
+
+                        IEnumerator<Toggle> toggleEnum_28 = question_28.ActiveToggles().GetEnumerator();
+                        toggleEnum_28.MoveNext();
+                        Toggle toggle_28 = toggleEnum_28.Current;
+                        string string_toggle_28 = collectToggles(toggle_28);
+
+                        IEnumerator<Toggle> toggleEnum_29 = question_29.ActiveToggles().GetEnumerator();
+                        toggleEnum_29.MoveNext();
+                        Toggle toggle_29 = toggleEnum_29.Current;
+                        string string_toggle_29 = collectToggles(toggle_29);
+
+                        IEnumerator<Toggle> toggleEnum_30 = question_30.ActiveToggles().GetEnumerator();
+                        toggleEnum_30.MoveNext();
+                        Toggle toggle_30 = toggleEnum_30.Current;
+                        string string_toggle_30 = collectToggles(toggle_30);
+
+						string_case_11 = string_toggle_28 + ";" + string_toggle_29 + ";" + string_toggle_30 + ";";
+
+                        foreach (GameObject gameObj in panels)
+                        {
+                            gameObj.SetActive(false);
+                        }
+                        panel_31.SetActive(true);
+                        panel_32.SetActive(true);
+                        panel_33_blank_panel.SetActive(true);
+                    }
+                    else
+                    {
+                        counter = counter - 1;
+                    }
+                    break;
+                default:
+				Debug.Log ("case default");
+				break;
+			}
+		}
+	}
+
+	void backward () {
+		Debug.Log("hallo-backward");
+		if (counter == 0) 
+		{
+			Debug.Log ("counter ist 0");
+		} else {
+			counter = counter - 1;
+			switch(counter) {
+			case 0:
+				foreach (GameObject gameObj in panels) {
+					gameObj.SetActive (false);
+				}
+                panel_vali_q.SetActive(true);
+				panel_vali_1.SetActive (true);
+				panel_vali_2.SetActive (true);
+				panel_vali_3.SetActive (true);
+                panel_vali_4.SetActive(true);
+				break;
+			case 1:
+				foreach (GameObject gameObj in panels) {
+					gameObj.SetActive (false);
+				}
+				panel_1.SetActive (true);
+				panel_2.SetActive (true);
+				panel_3.SetActive (true);
+				break;
+			case 2:
+				foreach (GameObject gameObj in panels) {
+					gameObj.SetActive (false);
+				}
+				panel_4.SetActive (true);
+				panel_5.SetActive (true);
+				panel_6.SetActive (true);
+				break;
+			case 3:
+				foreach (GameObject gameObj in panels) {
+					gameObj.SetActive (false);
+				}
+				panel_7.SetActive (true);
+				panel_8.SetActive (true);
+				panel_9.SetActive (true);
+				break;
+			case 4:
+				foreach (GameObject gameObj in panels) {
+					gameObj.SetActive (false);
+				}
+				panel_10.SetActive (true);
+				panel_11.SetActive (true);
+				panel_12.SetActive (true);
+				break;
+			case 5:
+				foreach (GameObject gameObj in panels) {
+					gameObj.SetActive (false);
+				}
+				panel_13.SetActive (true);
+				panel_14.SetActive (true);
+				panel_15.SetActive (true);
+				break;
+			case 6:
+				foreach (GameObject gameObj in panels) {
+					gameObj.SetActive (false);
+				}
+				panel_16.SetActive (true);
+				panel_17.SetActive (true);
+				panel_18.SetActive (true);
+				break;
+			case 7:
+				foreach (GameObject gameObj in panels) {
+					gameObj.SetActive (false);
+				}
+				panel_19.SetActive (true);
+				panel_20.SetActive (true);
+				panel_21.SetActive (true);
+				break;
+			case 8:
+				foreach (GameObject gameObj in panels) {
+					gameObj.SetActive (false);
+				}
+				panel_22.SetActive (true);
+				panel_23.SetActive (true);
+				panel_24.SetActive (true);
+				break;
+			case 9:
+				foreach (GameObject gameObj in panels) {
+					gameObj.SetActive (false);
+				}
+				panel_25.SetActive (true);
+				panel_26.SetActive (true);
+				panel_27.SetActive (true);
+				break;
+			case 10:
+				foreach (GameObject gameObj in panels) {
+					gameObj.SetActive (false);
+				}
+				panel_33_blank_panel.SetActive (false);
+				panel_28.SetActive (true);
+				panel_29.SetActive (true);
+				panel_30.SetActive (true);
+				break;
+			case 11:
+				foreach (GameObject gameObj in panels) {
+					gameObj.SetActive (false);
+				}
+				panel_31.SetActive (true);
+				panel_32.SetActive (true);
+				panel_33_blank_panel.SetActive (true);
+				break;
+			default:
+				Debug.Log ("case default");
+				break;
+			}
+		}
+	}
+    
+    string collectToggles(Toggle toggle)
+    {
+        Debug.Log(toggle.name);
+        switch(toggle.name)
+        {
+            case "Toggle_1":
+                return "1";
+            case "Toggle_2":
+                return "2";
+            case "Toggle_3":
+                return "3";
+            case "Toggle_4":
+                return "4";
+            case "Toggle_5":
+                return "5";
+            case "Toggle_6":
+                return "6";
+            case "Toggle_7":
+                return "7";
+            default:
+                return "f";
+        }
+
+    }
+
+    void passed()
+    {
+        ToggleGroup question_31 = panel_31.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+        ToggleGroup question_32 = panel_32.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
+        if (question_32.AnyTogglesOn() && question_31.AnyTogglesOn())
+        {
+
+            Debug.Log("passed fall");
+
+            IEnumerator<Toggle> toggleEnum_31 = question_31.ActiveToggles().GetEnumerator();
+            toggleEnum_31.MoveNext();
+            Toggle toggle_31 = toggleEnum_31.Current;
+            string string_toggle_31 = collectToggles(toggle_31);
+
+
+            IEnumerator<Toggle> toggleEnum_32 = question_32.ActiveToggles().GetEnumerator();
+            toggleEnum_32.MoveNext();
+            Toggle toggle_32 = toggleEnum_32.Current;
+			string string_toggle_32 = collectToggles (toggle_32);
+
+			string_case_12 = string_toggle_31 + ";" + string_toggle_32 + ";" + Environment.NewLine;
+
+            panel_34_end_panel.SetActive(true);
+            counter = 13;
+            StartCoroutine("csvWrite");
+        }
+    }
+	void csvWrite() {
+		csvString.Append (string_case_1);
+		csvString.Append (string_case_2);
+		csvString.Append (string_case_3);
+		csvString.Append (string_case_4);
+		csvString.Append (string_case_5);
+		csvString.Append (string_case_6);
+		csvString.Append (string_case_7);
+		csvString.Append (string_case_8);
+		csvString.Append (string_case_9);
+		csvString.Append (string_case_10);
+		csvString.Append (string_case_11);
+		csvString.Append (string_case_12);
+		Debug.Log (csvString.ToString ()); //hier output auf der konsole
+		File.AppendAllText (@"StudyLog.csv", csvString.ToString());
+		SceneManager.LoadScene (nextScene);
+		}
+}
