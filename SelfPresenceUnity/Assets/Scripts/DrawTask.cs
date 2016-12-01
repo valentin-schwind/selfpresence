@@ -20,34 +20,34 @@ public class DrawTask : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+
+        /*
+            When this script(on the current GameObject) is enabled,
+            this script enables all the required Objects and Scripts for the task.
+            First : find all the required Objects
+        */
         gameManager = transform.GetComponent<StraysGameManager>();
         typerCanvas = infoCanvas.transform.Find("Dialogue").Find("Text").GetComponent<Typer>();
         pDraw = transform.GetComponent<PinchDraw>();
         titleText = infoCanvas.transform.Find("TitleBar").Find("Text").GetComponent<Text>();
         titleText.text = "Task " + gameManager.getCurrentTaskNumber() + ": DrawTask";
+        
+        // and then enable them
         infoCanvas.GetComponent<Canvas>().enabled = true;
         typerCanvas.enabled = true;
         pDraw.enabled = true;
     }
 
-    // can be deleted now and instead, inserted in Start at the end
-    //public void beginTask(int taskNumber)
-    //{        
-    //}
-	
-	// Update is called once per frame
-
-    
 	public void disableTask () {
-        // Delete Draw(objects)
+        // Delete the drawn lines and disable the task-objects
         lineObjects = GameObject.FindGameObjectsWithTag("DynamicTag");
         for (int i = 0; i < lineObjects.Length; i++)
         {
             Destroy(lineObjects[i]);
         }
 
-            pDraw.enabled = false;
-            infoCanvas.GetComponent<Canvas>().enabled = false;
+        pDraw.enabled = false;
+        infoCanvas.GetComponent<Canvas>().enabled = false;
         this.enabled = false;        
     }
 }

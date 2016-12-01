@@ -8,17 +8,15 @@ using System;
 /*______________________________________________________________________________
 GAME MANAGER
 ------------------------------------------------------------------------------
-calls a coroutine of "CheckForKeyInput",
-which checks if f Key is pressed every 0.5 seconds.
+Skript which handles the correct procedure.
+Sets the order for the tasks and shuffles them.
+The core of this script is the decisionmaking()-algorithm.
+This method is called everytime the user pressed the load/finish task button.
+It decides if and which task should be loaded or stopped and logs the corresponding task time.
+loads next text after each succesful task.
+loads next scene if all tasks are complete
 
-Sets the order of the tasks.
-Put the tasks in the correct order into the SerializeFields.
-Only use following strings:
-keyboardtask
-boxestask
-drawtask
-
-Code done by stray
+written by : Stray
 ______________________________________________________________________________
 */
 
@@ -31,32 +29,46 @@ public class StraysGameManager : MonoBehaviour{
     }
     // Alternativ Shuffle
     [Header("Task Order (descending priority!)")]
-    [Tooltip("Highest priority! Ignores the  manuelly and random settings.")]
+
+    [Tooltip("Highest priority! Ignores the  manual and random settings.")]
     public bool shuffleTask = true;
-    [Tooltip("Ignores the setting of first, second and third task and instead, choose it randomly.")]
+
+    [Tooltip("Ignores the setting of first, second and third task and instead, chooses it randomly.")]
     public bool randomTask = false;
+
     int taskToStart;
-    [Tooltip("Task which will be start first.")]
+
+    [Tooltip("Task which will be started first.")]
     public WhichTask firstTask = WhichTask.cubetask;
-    [Tooltip("Task which will be start first.")]
+
+    [Tooltip("Task which will be started first.")]
     public WhichTask secondTask = WhichTask.drawtask;
-    [Tooltip("Task which will be start first.")]
+
+    [Tooltip("Task which will be started first.")]
     public WhichTask thirdTask = WhichTask.keyboardtask;
+
     private WhichTask[] tasks = new WhichTask[3];
+
     public LinkedList<WhichTask> taskslist = new LinkedList<WhichTask>();
     public LinkedListNode<WhichTask> currenttask;
 
+    // number of tasks completed in current scene.
     public int taskscomplete = 0;
     public bool taskisrunning = false;
     private double tasktime;
+    //path in which the logfile will be created
     private string pathforfile = @"StudyLog.csv";
+
     [SerializeField]
     private bool isfirstscene = false;
+
     [SerializeField]
     private GameObject infoCanvas;
+
     private bool infoActive = true;
-    //private string participantname = "Stanley";
-    private int parnumber = 18;
+    // Number of the current participant. Needed for the logs. Increase manualy
+    private int parnumber = 0;
+
     PyramidTask pyramidTask;
     DrawTask drawTask;
     KeyboardTask keyboardTask;
@@ -66,17 +78,19 @@ public class StraysGameManager : MonoBehaviour{
 
   public void Start()
   {
+        // load the scripts from the current gameobject to enable/disable them.
         pyramidTask = transform.GetComponent<PyramidTask>();
         drawTask = transform.GetComponent<DrawTask>();
         keyboardTask = transform.GetComponent<KeyboardTask>();
         strayloader = transform.GetComponent<StraysLoader>();
         screenfader = GameObject.Find("LMHeadMountedRig").transform.FindChild("CenterEyeAnchor").GetComponent<OVRScreenFade>();
 
-        // Nur bei initialisierung gebraucht: PlayerPrefs.SetInt("First Task", 0);
-
-        // Funktioniert... Debug.LogWarning("Playerpref ist " + PlayerPrefs.GetInt("First Task"));
-
-        // When tasks are manually chosen and both randomTask and shuffletask set to false
+        /*To set the order of the tasks, you have 3 options:
+            (1) Set the order manually
+            (2) Shuffle the order by randomly swapping tasks (not perfect randomness)
+            (3) randomize further
+        */
+        //When tasks are manually chosen and both randomTask and shuffletask set to false
         tasks[0] = firstTask;
         tasks[1] = secondTask;
         tasks[2] = thirdTask;
@@ -86,6 +100,7 @@ public class StraysGameManager : MonoBehaviour{
         {
             ShuffleArray(tasks);
         }
+
         // When shuffleTask is set to true in Inspector (highest priority)
         if (shuffleTask)
         {
@@ -95,40 +110,48 @@ public class StraysGameManager : MonoBehaviour{
             tasks[(taskToStart + 2) % 3] = thirdTask;
             PlayerPrefs.SetInt("First Task", (taskToStart + 1) % 3);
         }
+
+        // print the order in which the tasks will be loaded -> just for visibility
         for (int i =0; i < 3; i++)
             {
               print("task" + i + tasks[i]);
             }
+        //load the tasks into a list
         for(int j =0; j < tasks.Length; j++){
           taskslist.AddLast(tasks[j]);
         }
-        // if this is a new participant : create a new line with the participant nummer
 
+        // write the current participants number into a string
         string firstscenestring =  " participant" + parnumber +";";
+        //Append the string into the logfile
         File.AppendAllText(pathforfile, firstscenestring);
 
-        // for each scene write which scene is currently active
+        // At the start each scene write which scene is currently active into logfile
         File.AppendAllText(pathforfile, SceneManager.GetActiveScene().name + ";");
+
         currenttask = taskslist.First;
         print("GameManager started");
-        // commented out for Button implementation.
+
+        // Start the checkinput coroutine
         StartCoroutine(checkinput());
-        //
+
 
   }
 
   public IEnumerator checkinput(){
         /*
         checks every .001 seconds if the f key is pressed.
+        if so : manually loads the decisionmaking() method.
+        ONLY USE IN THE DRAW TASK,
+        since the user cant end the scene by himself.
+        TODO : Find an automated procedure for this.
         */
-    print("checkinput is called");
     while(true){
       if(Input.GetKeyDown(KeyCode.F)){
         if(infoActive == true)
                 {
                     infoActive = false;
                     infoCanvas.SetActive(false);
-
                 }
         print("Key press recognized");
 
@@ -141,7 +164,8 @@ public class StraysGameManager : MonoBehaviour{
 
   public void decisionmaking(){
     /*
-    Is called after an input is recognized.
+    Is called after user presses load/ finish button,
+    or f key is pressed ( for draw task only)
     Checks which Task should be the task to run
     Starts that task if no task is already running.
     stops that taks if there is already one.
@@ -151,13 +175,10 @@ public class StraysGameManager : MonoBehaviour{
 
     // if all tasks are already done : load next scene
     if (taskscomplete == 3) {
-        print("all tasks complete : loading next task");
             // Start changing to the next scene
-            screenfader.StartFade(); 
+            screenfader.StartFade();
             changeScene();
-
-    }
-    else{
+    } else{
       //check which task should be started or stopped
       switch (tasktoload){
         case WhichTask.keyboardtask:
@@ -184,11 +205,6 @@ public class StraysGameManager : MonoBehaviour{
                         {
                             currenttask = currenttask.Next;
                         }
-                        else
-                        {
-                            print("current task has no next");
-                        }
-
                     }
                     break;
         case WhichTask.drawtask:
@@ -216,11 +232,6 @@ public class StraysGameManager : MonoBehaviour{
                         {
                             currenttask = currenttask.Next;
                         }
-                        else
-                        {
-                            print("current task has no next");
-                        }
-
                     }
                     break;
         case WhichTask.cubetask:
@@ -249,14 +260,11 @@ public class StraysGameManager : MonoBehaviour{
                         {
                             currenttask = currenttask.Next;
                         }
-                        else
-                        {
-                            print("current task has no next");
-                        }
-
                     }
                     break;
         default:
+          // TODO: check if default really equals all tasks complete
+          // If so, put the code tho load next scene here.
           print("default case : all tasks complete?");
           break;
       }
@@ -265,7 +273,7 @@ public class StraysGameManager : MonoBehaviour{
 
   public static void ShuffleArray<T>(T[] arr){
     /*
-    Randomly swaps elements array with eachother.
+    Randomly swaps array elements with eachother.
     */
    for (int i = arr.Length - 1; i >= 0; i--) {
      int r = UnityEngine.Random.Range(0, i);
@@ -286,42 +294,34 @@ public class StraysGameManager : MonoBehaviour{
             yield return null;
 
         }
-        print("timeforcurrenttaskis: " + tasktime);
-        /*
-        commmented out because it logged the wrong task name
-        switch(currenttask.Value)
-        {
-            case WhichTask.cubetask:
-                logTaskTime("boxestask");
-                break;
-            case WhichTask.keyboardtask:
-                logTaskTime("keyboardtask");
-                break;
-            case WhichTask.drawtask:
-                logTaskTime("drawtask");
-                break;
-        }
-        */
+        print("time needed for current task: " + tasktime);
+        //write the current task and the tasktime into the file via logtasktime() method
         logTaskTime(calledtask);
         string tasktimestring = tasktime.ToString("F3");
         logTaskTime(tasktimestring);
-         
+
          yield return null;
-        
     }
 
   public void logTaskTime(string texttoadd){
-      if (!File.Exists(pathforfile))
+      /*
+        simply writes its parameter into the logfile
+        does not need to be the task time.
+        e.g. : current participant-nr,taskname, annotations?
+      */
+    // if there is no logfile yet : creates one!
+    if (!File.Exists(pathforfile))
     {
             //Create file to write to:
             string createText = "Selfpresence in Virtual Reality Study" + Environment.NewLine ;
             File.WriteAllText(pathforfile,createText);
     }
-   
+    // seperates all entrys by ";" for visibility
     string texttowrite = texttoadd + ";";
     File.AppendAllText(pathforfile,texttowrite);
 
     }
+
     public int getCurrentTaskNumber()
     {
         return taskscomplete+1;
@@ -329,7 +329,7 @@ public class StraysGameManager : MonoBehaviour{
 
     public void changeScene()
     {
+        //enables the gameobject that handles the scene changing
         strayloader.enabled = true;
     }
 }
-

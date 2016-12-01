@@ -7,6 +7,13 @@ using System;
 
 public class PyramidTask : MonoBehaviour
 {
+    /*
+        Once this script is enabled : enable all required objects.
+        After task is done : disable all the objects
+
+    *//
+    // Serialize Fields show up in the inspector
+    // In the Editor : (if not done by default :) drag the specified GameObjects into the associated Inspector fields
     [SerializeField]
     private GameObject testCubinho;
     [SerializeField]
@@ -23,10 +30,11 @@ public class PyramidTask : MonoBehaviour
     private PinchDetector pinchDetectorA;
     [SerializeField]
     private PinchDetector pinchDetectorB;
-    public Quaternion cubeSpwanRotation = Quaternion.Euler(55, 0, 55);
-
     private bool firstCube = true;
+
+    public Quaternion cubeSpawnRotation = Quaternion.Euler(55, 0, 55);
     Vector3 cubeSpawnPosition = new Vector3(-1.6f, 0.05f, -1.5f);
+
     public int taskNumber;
     private GameObject cube;
     LeapRTS rts;
@@ -42,34 +50,23 @@ public class PyramidTask : MonoBehaviour
 
     void Start ()
     {
-        planeTable.SetActive(true);
-        nextCubeCanvas.GetComponent<Canvas>().enabled = true;
+        //Find the required GameObjects
         gameManager = transform.GetComponent<StraysGameManager>();
         typerCanvas = infoCanvas.transform.Find("Dialogue").Find("Text").GetComponent<Typer>();
         titleText = infoCanvas.transform.Find("TitleBar").Find("Text").GetComponent<Text>();
         titleText.text = "Task " + gameManager.getCurrentTaskNumber() + ": Pyramid Task";
+        //enable them
+        planeTable.SetActive(true);
+        nextCubeCanvas.GetComponent<Canvas>().enabled = true;
         infoCanvas.GetComponent<Canvas>().enabled = true;
         typerCanvas.enabled = true;
-        Debug.LogWarning("Starting with RTS_Cube: " + (cubeCounter + 1));
-    }
-
-    
-	void Update ()
-    {
-        if (Input.GetKeyUp(KeyCode.N))
-        {
-            Debug.Log("n gedrückt");
-            nextCube();
-        }
-
     }
 
     public void nextCube()
     {
         if (firstCube)
         {
-            //cubes.AddLast(Instantiate(testCubinho) as GameObject);
-            cubes.AddLast(Instantiate(testCubinho, cubeSpawnPosition, cubeSpwanRotation) as GameObject);
+            cubes.AddLast(Instantiate(testCubinho, cubeSpawnPosition, cubeSpawnRotation) as GameObject);
             cube = cubes.Last.Value;
             cube.GetComponent<MeshRenderer>().material = cubeInUseMaterial;
             cube.GetComponent<LeapRTS>().PinchDetectorA = pinchDetectorA;
@@ -83,14 +80,13 @@ public class PyramidTask : MonoBehaviour
             rts = cube.GetComponent<LeapRTS>();
             rts.enabled = false;
             cube.GetComponent<MeshRenderer>().material = cubeNotInUseMaterial;
-            //cubes.AddLast(Instantiate(testCubinho) as GameObject);
-            cubes.AddLast(Instantiate(testCubinho, cubeSpawnPosition, cubeSpwanRotation) as GameObject);
+            cubes.AddLast(Instantiate(testCubinho, cubeSpawnPosition, cubeSpawnRotation) as GameObject);
             cube = cubes.Last.Value;
             pinchDetectorA.addCube(cube);
             pinchDetectorB.addCube(cube);
             cube.GetComponent<MeshRenderer>().material = cubeNotInUseMaterial;
             rts = cube.GetComponent<LeapRTS>();
-            Debug.Log("GetComponent rts und Coroutine wird aufgerufen");
+
             StartCoroutine(WaitTilNextRTS(waitForRTS));
 
         }
@@ -98,9 +94,7 @@ public class PyramidTask : MonoBehaviour
 
     private IEnumerator WaitTilNextRTS(float seconds)
     {
-        Debug.Log("Coroutine wurde aufgerufen");
         yield return new WaitForSeconds(seconds);
-        Debug.Log("in Coroutine nach WaitForSeconds: " + seconds);
         cubeCounter++;
         Debug.LogWarning("Current RTS_Cube: " + (cubeCounter + 1));
         cube.GetComponent<MeshRenderer>().material = cubeInUseMaterial;
@@ -111,7 +105,9 @@ public class PyramidTask : MonoBehaviour
     }
 
     public void disableTask()
-    {
+    {   //disables the task
+        // destroys all created cubes
+        // disables all gameObjects associated with pyramid task
         foreach (GameObject cube in cubes)
         {
                 Destroy(cube);
@@ -120,7 +116,6 @@ public class PyramidTask : MonoBehaviour
         pinchDetectorB.setRigidOff();
         infoCanvas.GetComponent<Canvas>().enabled = false;
             this.enabled = false;
-            Debug.LogWarning("Canvas sollte disabled sein");
             planeTable.SetActive(false);
             nextCubeCanvas.GetComponent<Canvas>().enabled = false;
     }
