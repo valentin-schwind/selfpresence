@@ -11,9 +11,12 @@ public class PyramidTask : MonoBehaviour
         Once this script is enabled : enable all required objects.
         After task is done : disable all the objects
 
-    *//
-    // Serialize Fields show up in the inspector
-    // In the Editor : (if not done by default :) drag the specified GameObjects into the associated Inspector fields
+    
+     Serialize Fields show up in the inspector
+     In the Editor : (if not done by default :) drag the specified GameObjects into the associated Inspector fields
+     again: try to avoid too many serializefields ( thorougly discussed in the question-after-task-script)
+
+     */
     [SerializeField]
     private GameObject testCubinho;
     [SerializeField]
@@ -21,11 +24,11 @@ public class PyramidTask : MonoBehaviour
     [SerializeField]
     private GameObject planeTable;
     [SerializeField]
-    private GameObject nextCubeCanvas;
+    private GameObject nextCubeCanvas; 
     [SerializeField]
-    private Material cubeInUseMaterial;
+    private Material cubeInUseMaterial;         //chose the material for the currently active cube
     [SerializeField]
-    private Material cubeNotInUseMaterial;
+    private Material cubeNotInUseMaterial;      //choose the material for the non-active cubes
     [SerializeField]
     private PinchDetector pinchDetectorA;
     [SerializeField]
@@ -64,12 +67,19 @@ public class PyramidTask : MonoBehaviour
 
     public void nextCube()
     {
+        /*
+        This method should be called on the next-cube-button.
+        once the button is pressed, it spawns a new cube and sets its colour to red,
+        to visualise which cube is currently active.
+        sets color of the old cube back to grey.
+        a lot of this code are remnants of an older version : so feel free to strip it down
+        */
         if (firstCube)
         {
-            cubes.AddLast(Instantiate(testCubinho, cubeSpawnPosition, cubeSpawnRotation) as GameObject);
+            cubes.AddLast(Instantiate(testCubinho, cubeSpawnPosition, cubeSpawnRotation) as GameObject);  // spawn a new cube
             cube = cubes.Last.Value;
-            cube.GetComponent<MeshRenderer>().material = cubeInUseMaterial;
-            cube.GetComponent<LeapRTS>().PinchDetectorA = pinchDetectorA;
+            cube.GetComponent<MeshRenderer>().material = cubeInUseMaterial; //this here sets the colour to red(in form of a material) for the first cube
+            cube.GetComponent<LeapRTS>().PinchDetectorA = pinchDetectorA;   // pinch detectors so it can be interacted with via leap motion
             cube.GetComponent<LeapRTS>().PinchDetectorB = pinchDetectorB;
             pinchDetectorA.addCube(cube);
             pinchDetectorB.addCube(cube);
@@ -79,15 +89,16 @@ public class PyramidTask : MonoBehaviour
             cube = cubes.Last.Value;
             rts = cube.GetComponent<LeapRTS>();
             rts.enabled = false;
-            cube.GetComponent<MeshRenderer>().material = cubeNotInUseMaterial;
-            cubes.AddLast(Instantiate(testCubinho, cubeSpawnPosition, cubeSpawnRotation) as GameObject);
+            cube.GetComponent<MeshRenderer>().material = cubeNotInUseMaterial;   // sets colour of old cube to non-active material
+            cubes.AddLast(Instantiate(testCubinho, cubeSpawnPosition, cubeSpawnRotation) as GameObject);  //spawn a new cube
             cube = cubes.Last.Value;
             pinchDetectorA.addCube(cube);
             pinchDetectorB.addCube(cube);
-            cube.GetComponent<MeshRenderer>().material = cubeNotInUseMaterial;
+            cube.GetComponent<MeshRenderer>().material = cubeNotInUseMaterial;      //set colour of the new cube to non-active-material (for now)
             rts = cube.GetComponent<LeapRTS>();
-
-            StartCoroutine(WaitTilNextRTS(waitForRTS));
+            // introduces a delay for bug fixing:
+            // when next button was pressed, the spawned cube was being moved simultaneously ,since the leap detected a pinch
+            StartCoroutine(WaitTilNextRTS(waitForRTS));         
 
         }
     }
@@ -97,7 +108,8 @@ public class PyramidTask : MonoBehaviour
         yield return new WaitForSeconds(seconds);
         cubeCounter++;
         Debug.LogWarning("Current RTS_Cube: " + (cubeCounter + 1));
-        cube.GetComponent<MeshRenderer>().material = cubeInUseMaterial;
+
+        cube.GetComponent<MeshRenderer>().material = cubeInUseMaterial;             //set colour of newest cube to active-material
 
         rts.enabled = true;
         cubes.Last.Value.GetComponent<LeapRTS>().PinchDetectorA = pinchDetectorA;

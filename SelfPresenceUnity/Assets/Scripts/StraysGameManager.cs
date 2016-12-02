@@ -16,6 +16,13 @@ It decides if and which task should be loaded or stopped and logs the correspond
 loads next text after each succesful task.
 loads next scene if all tasks are complete
 
+ADDITIONAL INFORMATION :
+
+This script is a component of the GameManager-GameObject, which contains all the task-scripts.
+We do not check if a user has completed a task correctly!!!
+The user can finish any task at any given time by pressing a canvas-button ( which calls the decisionmaking method in this script)
+make sure that all the gameobjects and their SerializeField are assigned correctly.
+many of the scripts can be optimized since they have been implemented poorly on some ends.
 written by : Stray
 ______________________________________________________________________________
 */
@@ -169,10 +176,13 @@ public class StraysGameManager : MonoBehaviour{
     Checks which Task should be the task to run
     Starts that task if no task is already running.
     stops that taks if there is already one.
+
+    TODO: for visiblity & reducing redundancy:
+          create new methods :startATask & stopATask,
+          to replace the content of the if-statements
     */
     WhichTask tasktoload;
     tasktoload = currenttask.Value;
-
     // if all tasks are already done : load next scene
     if (taskscomplete == 3) {
             // Start changing to the next scene
@@ -292,41 +302,35 @@ public class StraysGameManager : MonoBehaviour{
         {
             tasktime += Time.deltaTime;
             yield return null;
-
         }
         print("time needed for current task: " + tasktime);
         //write the current task and the tasktime into the file via logtasktime() method
         logTaskTime(calledtask);
         string tasktimestring = tasktime.ToString("F3");
         logTaskTime(tasktimestring);
-
-         yield return null;
+        yield return null;
     }
 
   public void logTaskTime(string texttoadd){
-      /*
+    /*
         simply writes its parameter into the logfile
         does not need to be the task time.
         e.g. : current participant-nr,taskname, annotations?
-      */
-    // if there is no logfile yet : creates one!
+    */
     if (!File.Exists(pathforfile))
     {
-            //Create file to write to:
+            //if there is no file yet :Create file to write to: (only needed once obv.)
             string createText = "Selfpresence in Virtual Reality Study" + Environment.NewLine ;
             File.WriteAllText(pathforfile,createText);
     }
-    // seperates all entrys by ";" for visibility
-    string texttowrite = texttoadd + ";";
+    string texttowrite = texttoadd + ";";               // seperates all entrys by ";" for visibility
     File.AppendAllText(pathforfile,texttowrite);
-
     }
 
     public int getCurrentTaskNumber()
     {
         return taskscomplete+1;
     }
-
     public void changeScene()
     {
         //enables the gameobject that handles the scene changing

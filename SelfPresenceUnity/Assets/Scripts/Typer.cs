@@ -6,14 +6,18 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Text))]
 
 public class Typer : MonoBehaviour {
-
+/*
+a sample typer script to write text to a canvas one letter at a time.
+not needed.
+but can be useful
+*/
+    [SerializeField] 
     public string msg = "Replace";
     private Text textComp;
     public float startDelay = 2f;
     public float typeDelay = 0.01f;
     public AudioClip putt;
 
-	// Use this for initialization
 	void Start () {
         StartCoroutine("TypeIn");
 	}

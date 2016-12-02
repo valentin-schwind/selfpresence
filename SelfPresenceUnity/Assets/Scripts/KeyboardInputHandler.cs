@@ -4,6 +4,9 @@ using System.Text;
 
 public class KeyboardInputHandler : MonoBehaviour
 {
+    /*
+        simple script to make the keyboard input visible on a textfield
+    */
     private StringBuilder stringBuilder;
     public UnityEngine.UI.Text TextOut;
     private string Contents;
@@ -15,11 +18,12 @@ public class KeyboardInputHandler : MonoBehaviour
         stringBuilder = new StringBuilder();
     }
 
- 
+
     public void WriteInputOnText(string texttoadd)
     {
         /*
         Reads the users Input and writes it onto the text field of the keyboard-Object
+        the input commes from the StraysButtonSkript, which gives the text of each button.
         */
         if (texttoadd == "<---")// == KeyCode.Backspace)
         {
@@ -37,6 +41,6 @@ public class KeyboardInputHandler : MonoBehaviour
 
         if (TextOut != null){
             TextOut.text = Contents;
-        } 
+        }
     }
 }

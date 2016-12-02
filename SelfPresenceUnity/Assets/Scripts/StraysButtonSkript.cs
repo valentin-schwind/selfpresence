@@ -3,6 +3,10 @@ using System.Collections;
  using UnityEngine.UI; // <-- you need this to access UI (button in this case) functionalities
 
 public class StraysButtonSkript : MonoBehaviour {
+    /*
+    a simple script to get a buttons text and transmit it to KeyboardInputHandler,
+    to write that text onto the textfield
+    */
     Button myButton;
     KeyboardInputHandler strayshandler;
 
@@ -20,6 +24,4 @@ public class StraysButtonSkript : MonoBehaviour {
         print(argument1);
         strayshandler.WriteInputOnText(argument1);
     }
-
-
 }
