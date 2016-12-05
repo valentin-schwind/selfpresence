@@ -9,21 +9,23 @@ using System.Timers;
 
 public class QuestionAfterTask : MonoBehaviour {
 	/*
-		Handles the script, which after each task asks the user how they liked it.
+		IDEA: after each completed task, ask the user how he would rate the task.
 		enables the questionaire_panel after a task is completed,
 		disables it once the user confirmed his answer & logs the answer
 
 		This Script is propably not the most elegant way of solvig this!!(some might call it terrible) it has many flaws.
 
-		TODO: find a better and more elegant solution. i would HIGHLY recommend implementing your own version : this one is poorly made...very very poory
+		TODO: find a better and more elegant solution.
+		i would HIGHLY recommend implementing your own version : this one is poorly made...very very poory
 		Probably by interacting directly with the game manager.
 
 		another note: Serialize fields are also not the best solution.
 		They are a quick and easy solution to finding game objects but cause many problems.
-		(every serializefield has to be handassigned if the script is applied to a new gameobject)
-		TODO : find a better solution for this as well. hint: find by tag ?
+		(every serializefield has to be manually assigned, if the script is applied to a new gameobject)
+		TODO : find a better solution for this as well. IDEA: on awake : find the object by id/tag...?
 
 		code by : patrick f.
+		commented and improved by : stray
 	*/
 	[SerializeField] Button forwardbutton_2;
 	[SerializeField] GameObject UIElementsPanel_Question_after_Task;
@@ -41,11 +43,13 @@ public class QuestionAfterTask : MonoBehaviour {
 	StraysGameManager stray;
 	//set the filepath here! make sure the name matches the one in StraysGameManager!!!
 	private string filepath = @"StudyLog.csv";
-	
+
 
 
 	void Start () {
+		//disable the questionaire at the start of the scene
 		Whole_Questionnaire.SetActive(false);
+		// instantiate the StraysGameManager script.
 		stray = gameManager.GetComponent<StraysGameManager>();
 	}
 
@@ -81,13 +85,13 @@ public class QuestionAfterTask : MonoBehaviour {
 			toggleEnum.MoveNext();
 			Toggle toggle = toggleEnum.Current;
 			string string_toggle = collectToggles (toggle); // "collect" toggles -> read which answer the user has given
-            question_after.SetAllTogglesOff();				
+            question_after.SetAllTogglesOff();
 			builder = string_toggle + ";"; //Zahl mit angehaengtem Semikolon
 			//write the answer into the file
 			StartCoroutine ("csvWrite");
 			ThanksPanel.SetActive (true);
-			UIElementsPanel_Buttons.SetActive (false);	
-			gogogo = true;	
+			UIElementsPanel_Buttons.SetActive (false);
+			gogogo = true;
 			currentTime = 0;		// reset the timer
 			StartCoroutine (countPanelTime());
 			StopCoroutine (delayTime());
@@ -96,6 +100,9 @@ public class QuestionAfterTask : MonoBehaviour {
 
 	string collectToggles(Toggle toggle)
 	{
+		/*
+			Checks which button was toggled and returns it's value
+		*/
 		switch(toggle.name)
 		{
 		case "Toggle_1":
@@ -118,17 +125,18 @@ public class QuestionAfterTask : MonoBehaviour {
 	}
 
 	void csvWrite() {
-		Debug.LogWarning (builder.ToString ()); //hier output auf der konsole
+		/* Write user's answer into the log */
+		Debug.LogWarning (builder.ToString ()); 			//hier output auf der konsole
 		File.AppendAllText (filepath, builder.ToString());
 	}
 
 	public IEnumerator countPanelTime(){
 		/*
-			This is makes sure that the panel only is visible once, by 
+			This is makes sure that the panel only is visible once, by
 			introducing a delay until all elements are set to false
 		*/
 		while(gogogo){
-			currentTime += Time.deltaTime;   // count the time
+			currentTime += Time.deltaTime;   			// count the time
 			if(currentTime > 3){						//after 3 seconds set the questionaire to false
 				Whole_Questionnaire.SetActive (false);
 				ThanksPanel.SetActive(false);

@@ -9,18 +9,21 @@ using System;
 GAME MANAGER
 ------------------------------------------------------------------------------
 Skript which handles the correct procedure.
-Sets the order for the tasks and shuffles them.
+Sets the desired order of the task : either manually or by randomizing
 The core of this script is the decisionmaking()-algorithm.
 This method is called everytime the user pressed the load/finish task button.
 It decides if and which task should be loaded or stopped and logs the corresponding task time.
 loads next text after each succesful task.
 loads next scene if all tasks are complete
 
-ADDITIONAL INFORMATION :
+ADDITIONAL INFORMATION about the procedure in general:
 
 This script is a component of the GameManager-GameObject, which contains all the task-scripts.
 We do not check if a user has completed a task correctly!!!
 The user can finish any task at any given time by pressing a canvas-button ( which calls the decisionmaking method in this script)
+if the button to end a task is pressed : the question_after_task shows up,
+the user rates the task and by commiting his answer this script loads the next task.
+
 make sure that all the gameobjects and their SerializeField are assigned correctly.
 many of the scripts can be optimized since they have been implemented poorly on some ends.
 written by : Stray
