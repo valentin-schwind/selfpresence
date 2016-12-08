@@ -8,6 +8,26 @@ using System.Text;
 using UnityEngine.SceneManagement;
 
 public class UI_panel_movement : MonoBehaviour {
+	/*
+		This script handles the questionaire in the questionaire_scene
+		It is atached to the button-panel of the questionaire-canvas.
+		If the user presses
+			forwardbutton : save the users answers & load the next 3 questions in the order
+			back-button   : load previous questions & load the answers again
+		If the user finishes the questionaire, load the next scene.
+
+		________________________________________________________________________
+		Notes for optimality:
+		This script is terrible since it has many bad practices of programming.
+		It is not very elegant, far from optimal and quite inflexible.
+		Every single case of following questions is hardcoded.
+		TODO: write this script from the ground-up.
+		Get rid of the hardcoded cases and use a smarter approach by dynamically
+		choosing which questions to load.
+
+		Coded by : patrick f.
+		commented by : Stray
+	*/
 	[SerializeField] Button backwardbutton;
 	[SerializeField] Button forwardbutton;
     [SerializeField] GameObject panel_vali_q;
@@ -68,6 +88,11 @@ public class UI_panel_movement : MonoBehaviour {
 
 	List<GameObject> panels = new List<GameObject> ();
 	void Start() {
+		/*
+		At the start of the scene, load all panels into a List.
+		again : not very well done
+		Why not use a for-loop?
+		*/
         panels.Add (panel_vali_q);
 		panels.Add (panel_vali_1);
 		panels.Add (panel_vali_2);
@@ -114,6 +139,16 @@ public class UI_panel_movement : MonoBehaviour {
         strayloader = transform.GetComponent<StraysLoader>();
     }
 	void forward() {
+		/*
+		if the user presses the forward-button :
+			save given answers.
+			disable old question-panels
+			load next questions in order
+		Assigns the buttons of a question to "ToggleGroups",
+		which make sure that only one of the buttons is pressed.
+
+		i will only comment the first 2 cases, since the rest is identical
+		*/
 		if (counter == 12)
 		{
 			Debug.Log ("counter ist 12");
@@ -125,6 +160,8 @@ public class UI_panel_movement : MonoBehaviour {
 				foreach (GameObject gameObj in panels) {
 					gameObj.SetActive (false);
 				}
+				//Enable the first 4 questions
+				// these are special questions that were added later
                 panel_vali_q.SetActive(true);
 				panel_vali_1.SetActive (true);
 				panel_vali_2.SetActive (true);
@@ -132,19 +169,19 @@ public class UI_panel_movement : MonoBehaviour {
 				panel_vali_4.SetActive (true);
 				break;
 			case 1:
+				//assign the togglegroups
 				ToggleGroup question_0_1 = panel_vali_1.GetComponentInChildren<ToggleGroup> () as ToggleGroup;
 				ToggleGroup question_0_2 = panel_vali_2.GetComponentInChildren<ToggleGroup> () as ToggleGroup;
 				ToggleGroup question_0_3 = panel_vali_3.GetComponentInChildren<ToggleGroup> () as ToggleGroup;
 				ToggleGroup question_0_4 = panel_vali_4.GetComponentInChildren<ToggleGroup> () as ToggleGroup;
+				//check if the user has given an answer to all 4 questions
 				if(question_0_3.AnyTogglesOn() && question_0_2.AnyTogglesOn() && question_0_1.AnyTogglesOn() && question_0_4.AnyTogglesOn()) {
-						
-						Debug.Log("1. fall");
-                        
+
+						//collect Toggles : check which answer the user has given
 						IEnumerator<Toggle> toggleEnum_0_1 = question_0_1.ActiveToggles().GetEnumerator();
                         toggleEnum_0_1.MoveNext();
                         Toggle toggle_0_1 = toggleEnum_0_1.Current;
                         string string_toggle_0_1 = collectToggles(toggle_0_1);
-
 
                         IEnumerator<Toggle> toggleEnum_0_2 = question_0_2.ActiveToggles().GetEnumerator();
                         toggleEnum_0_2.MoveNext();
@@ -161,17 +198,16 @@ public class UI_panel_movement : MonoBehaviour {
 						Toggle toggle_0_4 = toggleEnum_0_4.Current;
 						string string_toggle_0_4 = collectToggles(toggle_0_4);
 
-						
-						
-					string_case_1 = string_toggle_0_1 + ";" + string_toggle_0_2 + ";" + string_toggle_0_3 + ";" + string_toggle_0_4 + ";";
+						string_case_1 = string_toggle_0_1 + ";" + string_toggle_0_2 + ";" + string_toggle_0_3 + ";" + string_toggle_0_4 + ";";
 
-					foreach (GameObject gameObj in panels)
-					{
-						gameObj.SetActive(false);
-					}
-					panel_1.SetActive(true);
-					panel_2.SetActive(true);
-					panel_3.SetActive(true);
+						foreach (GameObject gameObj in panels)
+						{
+							gameObj.SetActive(false);
+						}
+						//enable the new questions, disable the old
+						panel_1.SetActive(true);
+						panel_2.SetActive(true);
+						panel_3.SetActive(true);
                         panel_vali_q.SetActive(false);
                         panel_vali_1.SetActive(false);
                         panel_vali_2.SetActive(false);
@@ -179,7 +215,7 @@ public class UI_panel_movement : MonoBehaviour {
                         panel_vali_4.SetActive(false);
                     } else
                     {
-                        counter = counter - 1;
+                        counter = counter - 1;		// increment case-counter
                     }
                     break;
 			case 2:
@@ -188,7 +224,7 @@ public class UI_panel_movement : MonoBehaviour {
                     ToggleGroup question_3 = panel_3.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
                     if (question_3.AnyTogglesOn() && question_2.AnyTogglesOn() && question_1.AnyTogglesOn())
                     {
-                        
+
                         Debug.Log("2. fall");
 
                         IEnumerator<Toggle> toggleEnum_1 = question_1.ActiveToggles().GetEnumerator();
@@ -206,7 +242,7 @@ public class UI_panel_movement : MonoBehaviour {
                         toggleEnum_3.MoveNext();
                         Toggle toggle_3 = toggleEnum_3.Current;
                        	string string_toggle_3 = collectToggles(toggle_3);
-						
+
 						string_case_2 = string_toggle_1 + ";" + string_toggle_2 + ";" + string_toggle_3 + ";";
                         foreach (GameObject gameObj in panels)
                         {
@@ -245,7 +281,7 @@ public class UI_panel_movement : MonoBehaviour {
                         toggleEnum_6.MoveNext();
                         Toggle toggle_6 = toggleEnum_6.Current;
 						string string_toggle_6 = collectToggles(toggle_6);
-						
+
 						string_case_3 = string_toggle_4 + ";" + string_toggle_5 + ";" + string_toggle_6 + ";";
                         foreach (GameObject gameObj in panels)
                         {
@@ -284,7 +320,7 @@ public class UI_panel_movement : MonoBehaviour {
                         toggleEnum_9.MoveNext();
                         Toggle toggle_9 = toggleEnum_9.Current;
 						string string_toggle_9 = collectToggles(toggle_9);
-						
+
 
 						string_case_4 = string_toggle_7 + ";" + string_toggle_8 + ";" + string_toggle_9 + ";";
                         foreach (GameObject gameObj in panels)
@@ -313,7 +349,7 @@ public class UI_panel_movement : MonoBehaviour {
                         toggleEnum_10.MoveNext();
                         Toggle toggle_10 = toggleEnum_10.Current;
                         string string_toggle_10 = collectToggles(toggle_10);
-						
+
 
                         IEnumerator<Toggle> toggleEnum_11 = question_11.ActiveToggles().GetEnumerator();
                         toggleEnum_11.MoveNext();
@@ -324,7 +360,7 @@ public class UI_panel_movement : MonoBehaviour {
                         toggleEnum_12.MoveNext();
                         Toggle toggle_12 = toggleEnum_12.Current;
 						string string_toggle_12 = collectToggles(toggle_12);
-						
+
 
 						string_case_5 = string_toggle_10 + ";" + string_toggle_11 + ";" + string_toggle_12 + ";";
                         foreach (GameObject gameObj in panels)
@@ -363,7 +399,7 @@ public class UI_panel_movement : MonoBehaviour {
                         toggleEnum_15.MoveNext();
                         Toggle toggle_15 = toggleEnum_15.Current;
 						string string_toggle_15 = collectToggles(toggle_15);
-						
+
 						string_case_6 = string_toggle_13 + ";" + string_toggle_14 + ";" + string_toggle_15 + ";";
                         foreach (GameObject gameObj in panels)
                         {
@@ -401,7 +437,7 @@ public class UI_panel_movement : MonoBehaviour {
                         toggleEnum_18.MoveNext();
                         Toggle toggle_18 = toggleEnum_18.Current;
                         string string_toggle_18 = collectToggles(toggle_18);
-						
+
 						string_case_7 = string_toggle_16 + ";" + string_toggle_17 + ";" + string_toggle_18 + ";";
                         foreach (GameObject gameObj in panels)
                         {
@@ -429,7 +465,7 @@ public class UI_panel_movement : MonoBehaviour {
                         toggleEnum_19.MoveNext();
                         Toggle toggle_19 = toggleEnum_19.Current;
 						string string_toggle_19 = collectToggles(toggle_19);
-				
+
                         IEnumerator<Toggle> toggleEnum_20 = question_20.ActiveToggles().GetEnumerator();
                         toggleEnum_20.MoveNext();
                         Toggle toggle_20 = toggleEnum_20.Current;
@@ -439,9 +475,9 @@ public class UI_panel_movement : MonoBehaviour {
                         toggleEnum_21.MoveNext();
                         Toggle toggle_21 = toggleEnum_21.Current;
 						string string_toggle_21 = collectToggles(toggle_21);
-						
+
 						string_case_8 = string_toggle_19 + ";" + string_toggle_20 + ";" + string_toggle_21 + ";";
-						
+
                         foreach (GameObject gameObj in panels)
                         {
                             gameObj.SetActive(false);
@@ -479,7 +515,7 @@ public class UI_panel_movement : MonoBehaviour {
                         toggleEnum_24.MoveNext();
                         Toggle toggle_24 = toggleEnum_24.Current;
 						string string_toggle_24 = collectToggles(toggle_24);
-		
+
 						string_case_9 = string_toggle_22 + ";" + string_toggle_23 + ";" + string_toggle_24 + ";";
                         foreach (GameObject gameObj in panels)
                         {
@@ -579,8 +615,8 @@ public class UI_panel_movement : MonoBehaviour {
 	}
 
 	void backward () {
-		Debug.Log("hallo-backward");
-		if (counter == 0) 
+		// somewhat analog to forward-button
+		if (counter == 0)
 		{
 			Debug.Log ("counter ist 0");
 		} else {
@@ -691,10 +727,9 @@ public class UI_panel_movement : MonoBehaviour {
 			}
 		}
 	}
-    
+
     string collectToggles(Toggle toggle)
-    {
-        Debug.Log(toggle.name);
+    {	//for the given Toggles : check which answer the user has given
         switch(toggle.name)
         {
             case "Toggle_1":
@@ -714,11 +749,10 @@ public class UI_panel_movement : MonoBehaviour {
             default:
                 return "f";
         }
-
     }
 
     void passed()
-    {
+    {	// if the user has answered all questions : load next scene
         ToggleGroup question_31 = panel_31.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
         ToggleGroup question_32 = panel_32.GetComponentInChildren<ToggleGroup>() as ToggleGroup;
         if (question_32.AnyTogglesOn() && question_31.AnyTogglesOn())
@@ -745,6 +779,7 @@ public class UI_panel_movement : MonoBehaviour {
         }
     }
 	void csvWrite() {
+		//write all the answers to the logfile
 		csvString.Append (string_case_1);
 		csvString.Append (string_case_2);
 		csvString.Append (string_case_3);

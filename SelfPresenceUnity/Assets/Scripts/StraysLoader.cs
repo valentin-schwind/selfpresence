@@ -14,6 +14,9 @@ public class StraysLoader : MonoBehaviour {
         It seems like the occulus doesnt support OnGUI draws!
         needs testing and perhaps another approach should be chosen to implement a fade.
         (TEST IN OCCULUS!! the onGui draw shows up in the editor but not nessecarily in the rift)
+        ---
+        optimization:
+        get rid of it for easy acces from any scene.
 
         written by : Stray
     */
@@ -44,7 +47,8 @@ public class StraysLoader : MonoBehaviour {
         // force (clamp) the number to be between 0 and 1 because GUI.color uses Alpha values between 0 and 1
         alpha = Mathf.Clamp01(alpha);
 
-        // set color of our GUI (in this case our texture). All color values remain the same & the Alpha is set to the alpha variable
+        // set color of our GUI (in this case our texture).
+        //All color values remain the same & the Alpha is set to the alpha variable
         GUI.color = new Color(GUI.color.r, GUI.color.g, GUI.color.b, alpha);
         GUI.depth = drawDepth;                                                              // make the black texture render on top (drawn last)
         GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), fadeOutTexture);       // draw the texture to fit the entire screen area
