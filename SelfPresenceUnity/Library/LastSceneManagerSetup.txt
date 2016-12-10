@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Female Hands Question.unity
+- path: Assets/Scenes/1 Welcome Scene.unity
   isLoaded: 1
   isActive: 1
